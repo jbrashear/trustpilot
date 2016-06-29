@@ -1,0 +1,22 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: jbrashear
+ * Date: 6/1/16
+ * Time: 4:36 PM
+ * setup Trustpilot API Keys, Business Unit, username and password.
+ * All will be given to you from your Trust Pilot REP
+ *
+ * Please rename this file to config.php
+ *
+ */
+
+$api_key = ""; // Enter you API key
+
+$api_secret = ""; // enter your secret key
+
+$businessUnitID = ""; // Enter your Business Unit ID
+
+$username = ""; // user name used for logging into your Trustpilot account. Your email used.
+
+$password = ""; //password used for logging into your Trustpilot account

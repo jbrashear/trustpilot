@@ -5,18 +5,70 @@
  * Date: 6/1/16
  * Time: 4:36 PM
  * setup Trustpilot API Keys, Business Unit, username and password.
- * All will be given to you from your Trust Pilot REP
- *
- * Please rename this file to config.php
- *
+ * All will be given to you from your
  */
 
-$api_key = ""; // Enter you API key
+define ('API_URL',"");
 
-$api_secret = ""; // enter your secret key
+define ('API_KEY', "");
 
-$businessUnitID = ""; // Enter your Business Unit ID
+define ('API_SECRET', "");
 
-$username = ""; // user name used for logging into your Trustpilot account. Your email used.
+define ('BUSINESS_UNIT_ID', "");
 
-$password = ""; //password used for logging into your Trustpilot account
+define ('USER_NAME', "");
+
+define ('PASSWORD', "");
+
+// comment out for production.
+ define('MG360',null); // uncomment for testing.
+
+
+
+/**
+ * Send curl request with API Key in the header.
+ *
+ * Expanded Docs Here.
+ *
+ * @param $url string The end point of the API you want to call.
+ * @return mixed | object
+ */
+function sendrequest($url) {
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+        CURLOPT_RETURNTRANSFER => 1,
+        CURLOPT_URL => API_URL . $url,
+        CURLOPT_HTTPHEADER => [
+            "apikey:" . API_KEY
+        ]
+    ));
+
+    $response = curl_exec($curl); curl_close($curl);
+    return json_decode($response);
+    
+}
+
+// function used for getting image for stars used with Trust pilot for review.
+function stars($starCount)
+{
+    static $cache = array();
+    if (!array_key_exists($starCount, $cache)) {
+
+        $stars = sendrequest("/resources/images/stars/" . $starCount);
+
+        $url = reset(array_map(function ($star) {
+            if (isset ($star->url)) {
+                return $star->url;
+            } else {
+                return $star;
+            }
+        }, get_object_vars($stars)));
+
+
+        $cache[$starCount] = "<img class =\"tpstar\" src=\"" . $url . "\">";
+    }
+    return $cache[$starCount];
+}
+
+
